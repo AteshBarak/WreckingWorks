@@ -57,11 +57,11 @@ public class BrokenManager : MonoBehaviour
         if (isBroke) return;
 
         sound.PlayScrape();
-        Vector3 _newPos = transform.localPosition;
+        Vector3 _newPos = transform.position;
         _newPos += new Vector3(Random.Range(-3f, 3f), 0, Random.Range(-3f, 3f));
-        _newPos.y = -1;
-        transform.DOLocalRotate(new Vector3(Random.Range(-90, 90), Random.Range(-90, 90), Random.Range(-90, 90)), 0.75f);
-        transform.DOLocalJump(_newPos, 1, 1, 0.75f).SetEase(Ease.InFlash).onComplete += () =>
+        _newPos.y = 0f;
+        transform.DOLocalRotate(new Vector3(Random.Range(-90, 90), Random.Range(-90, 90), Random.Range(-90, 90)), 0.5f);
+        transform.DOJump(_newPos, 1, 1, 0.5f).SetEase(Ease.InFlash).onComplete += () =>
         {
             isBroke = true;
         };

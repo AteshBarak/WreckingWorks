@@ -18,12 +18,13 @@ public class PlayerCollect : MonoBehaviour
     public bool isExchanging = false;
 
     public MoneyBankManager money;
-    public bool incomeBoost = false;
     public PlayerSound sound;
 
     private BrokenParent brokenParentManager;
 
     public bool isMaxCollect = false;
+
+    private int income = 1;
 
     private void Start()
     {
@@ -32,6 +33,11 @@ public class PlayerCollect : MonoBehaviour
         if (PlayerPrefs.HasKey("MaxCollect"))
         {
             maxCollect = PlayerPrefs.GetInt("MaxCollect");
+        }
+
+        if (PlayerPrefs.HasKey("Income"))
+        {
+            income = PlayerPrefs.GetInt("Income");
         }
     }
 
@@ -66,18 +72,26 @@ public class PlayerCollect : MonoBehaviour
 
         isFull = false;
         fullImage.GetComponent<Image>().enabled = false;
+        sound.PlayUpgrade();
+    }
+
+    public void ChangeIncome()
+    {
+        income += 1;
+        PlayerPrefs.SetInt("Income", income);
+        sound.PlayUpgrade();
     }
 
     public void CollectBroken(GameObject _broken)
     {
         if (_broken != null && (!isFull || isMaxCollect))
         {
-            brokenList.Add(_broken);
             _broken.GetComponent<Collider>().enabled = false;
             _broken.transform.parent = brokenParent.transform;
+            brokenList.Add(_broken);
             Vector3 _newPos = Vector3.zero;
             _newPos.y = yPos + (addYPos * brokenList.Count);
-            _broken.transform.DOLocalJump(_newPos, 1.5f, 1, 0.5f);
+            _broken.transform.DOLocalMove(_newPos, 0.5f);
             sound.PlayCollect();
 
             if (brokenList.Count >= maxCollect && !isFull && !isMaxCollect)
@@ -124,14 +138,7 @@ public class PlayerCollect : MonoBehaviour
                 {
                     _broken.transform.parent = _sellManager.sellParent.transform;
                     brokenList.Remove(_broken);
-                    if (incomeBoost)
-                    {
-                        money.AddMoney(3);
-                    }
-                    else
-                    {
-                        money.AddMoney(1);
-                    }
+                    money.AddMoney(income);
                     _broken.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.35f).onComplete += () =>
                     {
                         brokenParentManager.DestroyCount(_broken);

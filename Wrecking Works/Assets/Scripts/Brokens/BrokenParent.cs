@@ -7,13 +7,11 @@ public class BrokenParent : MonoBehaviour
 {
     public List<GameObject> brokens = new List<GameObject>();
 
-    //public Image bar;
-    //public Image star;
+    public Image bar;
+    public Image star;
 
     private float allBrokens = 0;
     private float addBar = 0;
-
-    //public StopAllForButton stopAll;
 
     private void Awake()
     {
@@ -33,7 +31,7 @@ public class BrokenParent : MonoBehaviour
 
     public void AddToBar()
     {
-        //bar.fillAmount += addBar;
+        bar.fillAmount += addBar;
     }
 
     public void DestroyCount(GameObject _object)
@@ -42,10 +40,9 @@ public class BrokenParent : MonoBehaviour
         brokens.Remove(_object);
         Destroy(_object);
         AddToBar();
-        //if (bar.fillAmount > 0.9f)
-        //{
-        //    //stopAll.Final();
-        //    star.enabled = true;
-        //}
+        if (bar.fillAmount > 0.9f)
+        {
+            star.enabled = true;
+        }
     }
 }
