@@ -14,7 +14,7 @@ public class AlbumManager : MonoBehaviour
 
     private void Awake()
     {
-        PlayerPrefs.SetInt("EmojisIndex", 10);
+        PlayerPrefs.SetInt("EmojisIndex", 45);
 
         for (int i = 0; i < transform.childCount; i++)
         {
